@@ -1,0 +1,124 @@
+import gradio as gr
+
+def predict(
+    sneezing, cough, runny_nose, headache,
+    body_ache, fever, fatigue, short_breath, chest_pain
+):
+    if fever == 2 and body_ache == 2:
+        diagnosis = "Possible Flu / Dengue 🤒"
+        message = "High fever with severe body ache could indicate Flu or Dengue. Please consult a doctor immediately! 🚨"
+    elif sneezing == 2 and runny_nose == 2:
+        diagnosis = "Seasonal Allergy 🤧"
+        message = "Severe sneezing and runny nose are typical of seasonal allergies. Pollen counts might be high! 🌸"
+    else:
+        diagnosis = "Common Cold ☕"
+        message = "Mild symptoms suggest a common cold. Rest up and stay hydrated! 💧"
+    
+    return f"RESULT: {diagnosis}\n\nADVICE: {message}"
+
+# CSS to completely remove the orange and make everything light blue / pink / dark pink
+custom_css = """
+<style>
+/* Background */
+.gradio-container {
+    background-color: #FFDBCC !important;
+    color: #FF69B4 !important;
+}
+
+/* Slider bars */
+input[type='range'] {
+    accent-color: #ADD8E6 !important; /* light blue bar */
+    background-color: #FFDBCC !important; /* behind slider */
+    border-radius: 10px;
+    height: 8px;
+    -webkit-appearance: none;
+}
+
+/* Remove default focus outline / orange glow in Chrome */
+input[type='range']:focus {
+    outline: none;
+    box-shadow: none !important;
+}
+
+/* Slider thumb */
+input[type='range']::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background-color: #ADD8E6 !important;
+    border: 2px solid #800040; /* dark pink border */
+    cursor: pointer;
+    margin-top: -6px; /* center thumb */
+}
+
+input[type='range']::-moz-range-thumb {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background-color: #ADD8E6 !important;
+    border: 2px solid #800040;
+    cursor: pointer;
+}
+
+input[type='range']::-ms-thumb {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background-color:rgb(173, 216, 230) !important;
+    border: 2px solid #800040;
+    cursor: pointer;
+}
+
+/* Prediction box */
+#predict_box textarea {
+    background-color: #CBAACB !important;
+    color: #800040 !important;
+    font-weight: 900;
+    font-size: 1.2em;
+    border: 3px solid #ADD8E6 !important;
+    border-radius: 10px;
+    padding: 10px;
+}
+
+/* Titles and labels */
+h1, h2, h3, h4, h5, h6, label, .gr-label {
+    color: #FF69B4 !important;
+    font-weight: bold !important;
+}
+</style>
+"""
+
+with gr.Blocks() as demo:
+    gr.HTML(custom_css)  # insert CSS
+    gr.Markdown("<h1 style='color:#FF69B4; text-align:center;'>🧠 AI Disease Prediction System 🩺</h1>")
+    gr.Markdown("<p style='color:#FF69B4;'>Adjust the sliders below to report your symptoms (0=None, 2=Severe)</p>")
+    
+    with gr.Row():
+        with gr.Column():
+            s1 = gr.Slider(0, 2, step=1, label="Sneezing 🤧")
+            s2 = gr.Slider(0, 2, step=1, label="Cough 😮‍💨")
+            s3 = gr.Slider(0, 2, step=1, label="Runny Nose 💧")
+            s4 = gr.Slider(0, 2, step=1, label="Headache 🤯")
+            s5 = gr.Slider(0, 2, step=1, label="Body Ache 🦴")
+            s6 = gr.Slider(0, 2, step=1, label="Fever 🔥")
+            s7 = gr.Slider(0, 2, step=1, label="Fatigue 😴")
+            s8 = gr.Slider(0, 2, step=1, label="Shortness of Breath 🫁")
+            s9 = gr.Slider(0, 2, step=1, label="Chest Pain 💔")
+            
+            submit_btn = gr.Button("Get Diagnosis ✨", variant="primary")
+
+        with gr.Column():
+            output_text = gr.Textbox(
+                label="Diagnosis & Advice 📋",
+                elem_id="predict_box",
+                lines=8
+            )
+
+    submit_btn.click(
+        fn=predict,
+        inputs=[s1, s2, s3, s4, s5, s6, s7, s8, s9],
+        outputs=output_text
+    )
+
+demo.launch(share=True)
