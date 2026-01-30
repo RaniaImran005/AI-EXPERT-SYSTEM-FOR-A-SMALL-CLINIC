@@ -1,0 +1,10 @@
+plt.figure(figsize=(30, 15))
+tree.plot_tree(
+    model,
+    feature_names=X.columns,
+    class_names=model.classes_,
+    filled=True,
+    rounded=True
+)
+plt.show()
+
