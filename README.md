@@ -25,6 +25,9 @@ AI ALGORITHM
 The project uses the Decision Tree algorithm for classification.
 It learns patterns from symptom data and predicts whether a patient should be referred to a
 doctor.
-The project uses the Decision Tree algorithm for classification.
-It learns patterns from symptom data and predicts whether a patient should be referred to a
-doctor.
+Tools and Technologies
+I. Python
+II. scikit-learn
+III. pandas
+IV. matplotlib (for visualization)
+V. Gradio
